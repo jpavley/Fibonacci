@@ -11,12 +11,12 @@ Fibonacci numbers are easy but expensive to calculate (if we skip over the first
 
 Do you see the pattern?  After first two, the next Fibonacci number is the sum of the previous two!
 
-Writing a computer program to calculate any given Fibonacci number is pretty easy but could create many calculations. If you want to find the 20th Fibonacci number you have to, at least calculate the preceeding 19. Another problem for computers is that Fibonacci numbers grow big fast (expoentially).
+Writing a computer program to calculate any given Fibonacci number is pretty easy but could create many calculations. If you want to find the 20th Fibonacci number you have to, at least calculate the preceding 19. Another problem for computers is that Fibonacci numbers grow big fast (exponentially).
 
-Given the characteristics of calculating Fibonacci numbers its a good idea to figure out the least expensive method (algorthm) to do so. But it's important to understand what "expensive" means in your context: The amopunt of calcuations? The time it takes to calcuate? The amount of memory it takes to calcuate? the amount of memory it takes to represent them? You computer envrionment has limits and calculating Fibonacci numbers will quickly help you slam into them. This is why Fibonacci numbers are fun to play with.
+Given the characteristics of calculating Fibonacci numbers its a good idea to figure out the least expensive method (algorithm) to do so. But it's important to understand what "expensive" means in your context: The amount of calculations? The time it takes to calculate? The amount of memory it takes to calculate? the amount of memory it takes to represent them? You computer environment has limits and calculating Fibonacci numbers will quickly help you slam into them. This is why Fibonacci numbers are fun to play with.
 
 ## Fib2.playground
 
-I created a Swift Playground to discover the best way to calcuate Fibonacci numbers in Xcode and macOS. Spoiler Alert! None of these are the "best way". The actual best way is not to calculate Fibonacci numbers at all, just copy them in to an array and look them up! This is called caching or pre-calcuation and since Fibonacci numbers are eternal you have have to worry about updates. But what you learn by playing with Fibonacci numbers can be used in other cases so this playground is not a total waste of time.
+I created a Swift Playground to discover the best way to calculate Fibonacci numbers in Xcode and macOS. Spoiler Alert! None of these are the "best way". The actual best way is not to calculate Fibonacci numbers at all, just copy them in to an array and look them up! This is called caching or pre-calculation and since Fibonacci numbers are eternal you have have to worry about updates. But what you learn by playing with Fibonacci numbers can be used in other cases so this playground is not a total waste of time.
 
 The playground is fully documented and just requires Xcode 10 and Swift 4.1 to run.
