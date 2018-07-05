@@ -73,6 +73,7 @@ class Fibonacci {
     /// - Returns: the fibonacci number calucated
     func recursive(_ position: Int) -> Int {
         var value = 0
+
         
         if position == 1 || position == 2 {
             
@@ -133,7 +134,7 @@ class Fibonacci {
     }
 }
 
-let searchIndex = 10
+let searchIndex = 20
 let fib = Fibonacci()
 var analysis = [String:Double]()
 
@@ -181,4 +182,5 @@ let analysisSorted = analysis.sorted(by: {$0.value < $1.value} )
 for item in analysisSorted {
     print("\(String(format: "%.10f", item.value)) \(item.key)")
 }
+
 
