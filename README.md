@@ -17,6 +17,6 @@ Given the characteristics of calculating Fibonacci numbers its a good idea to fi
 
 ## Fib2.playground
 
-I created a Swift Playground to discover the best way to calculate Fibonacci numbers in Xcode and macOS. Spoiler Alert! None of these are the "best way". The actual best way is not to calculate Fibonacci numbers at all, just copy them in to an array and look them up! This is called caching or pre-calculation and since Fibonacci numbers are eternal you have have to worry about updates. But what you learn by playing with Fibonacci numbers can be used in other cases so this playground is not a total waste of time.
+I created a Swift Playground to discover the best way to calculate Fibonacci numbers in Xcode and macOS. Spoiler Alert! None of these are the "best way". The actual best way is not to calculate Fibonacci numbers at all, just copy them from somewhere else and paste them into an array for easy look up! This is called caching or pre-calculation and since Fibonacci numbers are eternal you have have to worry about updates. But what you learn by playing with Fibonacci numbers can be used in other cases so this playground is not a total waste of time.
 
 The playground is fully documented and just requires Xcode 10 and Swift 4.1 to run.
