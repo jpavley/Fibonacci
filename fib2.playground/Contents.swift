@@ -1,13 +1,40 @@
 import Foundation
 
-/// Demos of different ways to calculate Fibonacci numbers
-/// and how efficent they might be.
-///
-/// A Fibonacci number is part of a sequence that starts with
-/// [1,1] and continues such that the next number is the sum of
-/// previous two: [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...]
+//: # Fibonacci Playground
+//: Demos of different ways to calculate Fibonacci numbers and how efficent they might be.
+//:
+//: A Fibonacci number is part of a sequence that starts with [1,1] and continues such that the next number is the sum of previous two: [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...]
+//:
+//: The Fibonacci numbers is one of our favorite sets. It's a sequence of numbers that been discovered multiple times, probably first in Ancient India, and introduced to Europeans by an Italian mathematician who gave the sequence its name in 1202 C.E. Fibonacci numbers are found all over mathematics, computer science, the natural world--most beautifully in the arrangement of a pine cone's scales.
+//:
+//: Fibonacci numbers are easy but expensive to calculate (if we skip over the first two). Here are the first 10:
+//:
+//:      +----|----|----|----|----|----|----|----|----|----+
+//:      | F0 | F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 | F9 |
+//:      |----|----|----|----|----|----|----|----|----|----|
+//:      |  0 |  1 |  1 |  2 |  3 |  5 |  8 | 13 | 21 | 34 |
+//:      +----|----|----|----|----|----|----|----|----|----+
+//:
+//: Do you see the pattern?  After first two, the next Fibonacci number is the sum of the previous two!
+//:
+//: Writing a computer program to calculate any given Fibonacci number is pretty easy but could create many calculations. If you want to find the 20th Fibonacci number you have to, at least calculate the preceding 19. Another problem for computers is that Fibonacci numbers grow big fast (exponentially).
+//:
+//: Given the characteristics of calculating Fibonacci numbers its a good idea to figure out the least expensive method (algorithm) to do so. But it's important to understand what "expensive" means in your context: The amount of calculations? The time it takes to calculate? The amount of memory it takes to calculate? the amount of memory it takes to represent them? You computer environment has limits and calculating Fibonacci numbers will quickly help you slam into them. This is why Fibonacci numbers are fun to play with.
+//:
+//: For much more info check out this Wikipedia article on [Fibonacci Numbers](https://en.wikipedia.org/wiki/Fibonacci_number)
+
+//: ## Fibonacci class
+//: Read over the plass and then jump to the bottom to see how to use it to calculate your favorite Fibonacci number.
+
+/// A class that will help us explore differnt algorthms and measure their efficency at calculating Fibonacci numbers.
 class Fibonacci {
-    
+
+    /// Enunumeration of different methods for calculating Fibonacci numbers. Used to choose a particular method "on demand" in the calc(::) function.
+    ///
+    /// - shuffle: Old school use of temp variable to "shuffle" calcuated values in side a loop. Old school because this was how we did it before modern compilers supported recursive functions.
+    /// - recursive: Modern use of a function that calls itself to repeatedly calcuate a value. Great way to impress your coder friends.
+    /// - memoized: Improves the efficiency of the recursive method by storing calcuations for look up as needed. Redeems recursion a bit.
+    /// - bottomsup: Here we chuck out recursion in favor of just remembering the previously calucated values. Think of it as shuffle with memoization.
     enum CalcStyle {
         case shuffle, recursive, memoized, bottomsup
     }
@@ -134,9 +161,10 @@ class Fibonacci {
     }
 }
 
-let searchIndex = 20
 let fib = Fibonacci()
 var analysis = [String:Double]()
+
+let searchIndex: Int = 10
 
 var (fibNumber, timing) = fib.calc(nth: searchIndex, style: .shuffle)
 print("Shuffle() found that the \(searchIndex)th fibonacci number is \(fibNumber) ")
