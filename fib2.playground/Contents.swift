@@ -39,110 +39,151 @@ class Fibonacci {
         case shuffle, recursive, memoized, bottomsup
     }
     
+    
+    /// An array to store all the previous Fibonacci number's calcuated. Storage for the methods that use memoization.
     var previousValues = [Int]()
     
-    /// Calcuates a fibonacci number using one of three methods
+    /// Calcuates a Fibonacci number using one of four methods and reports how long it took.
     ///
     /// - Parameters:
-    ///   - nth: which fibonacci number to calculate
-    ///   - style: Which algorthm to use: recursive, memoized, bottomsup
-    /// - Returns: A tuple that includes the fibonacci number calcuated and how many seconds the method spent
+    ///   - nth: which Fibonacci number to calculate.
+    ///   - style: Which algorthm to use: recursive, memoized, bottomsup.
+    /// - Returns: A tuple that includes the fibonacci number calcuated and how many seconds the method spent.
     func calc(nth: Int, style: CalcStyle) -> (fibNumber: Int, timing: Double) {
-        var foundValue = 0
-        var timing = 0.0
-        previousValues = [Int](repeating: 0, count: nth + 1)
         
+        /// The result of all this calculation.
+        var foundValue = 0
+        
+        /// How long it took to do the calculating.
+        var timing = 0.0
+        
+        previousValues = [Int](repeating: 0, count: nth + 1) // Make the previous values Array just large enough to store all the numbers from 0th upto and including the nth. All the elements are initialized to 0 as signal that we have not calcuated a value for each index as of yet.
+        
+        /// Punch the clock! Remember when we started!
         let startTime = Date()
         
         switch style {
             
         case .shuffle:
             foundValue = shuffle(nth)
+            
         case .recursive:
             foundValue = recursive(nth)
+            
         case .memoized:
             foundValue = memoized(nth)
+            
         case .bottomsup:
             foundValue = bottomsup(nth)
         }
         
-        let endTime = Date()
-        timing = endTime.timeIntervalSince(startTime)
         
-        return (foundValue, timing)
+        /// Punch the clock again! Remember when we got a value back!
+        let endTime = Date()
+        
+        timing = endTime.timeIntervalSince(startTime) // In iOS a TimeInterval is the number of seconds, with the percision of a Double.
+        
+        return (foundValue, timing) // return both the nth Fibonacci number and the duration of calcuation!
     }
     
-    /// Calcuates a fibonacci number via shuffling values with a `temp` varliable
+    /// Calcuates a Fibonacci number via shuffling values with a `temp` varliable.
     ///
-    /// - Parameter position: position: which fibonacci number to calculate
-    /// - Returns: the fibonacci number calucated
+    /// - Parameter position: which Fibonacci number to calculate.
+    /// - Returns: the fibonacci number calucated.
     func shuffle(_ position: Int) -> Int {
         
-        if position <= 1 {
+        
+        if position <= 1 { // We know that the 0th and 1st Fibonacci numbers are 1.
             return position
         }
         
+        /// Currently calcuated Fibonacci number.
         var a = 1
+        
+        /// Previously calcuated Fibonacci number.
         var b = 1
         
-        for _ in 2..<position {
-            let temp = a
-            a += b
-            b = temp
+        /// Varible to temporarily hold the current calcuated Fibonacci number so that it can be passed on to `b` after `a` is updated with a new Fibonacci number.
+        var temp = 0
+        
+        for _ in 2..<position { // Loop from the 2nd position to the desired postion (the nth).
+            temp = a  // Store the current value of most recently calcuated Fibonacci number in `temp`.
+            a += b    // Add the previous Fibonacci number to the most recent value. F = (F-1) + (F-2).
+            b = temp  // Store the value of the old `current Fibonacci number` in `b` so we can add it to a future `a`.
         }
         
-        return a
+        return a // When the loop is done we have the Fibonacci number that was asked for!
     }
     
-    /// Calcuates a fibonacci number via naive recursion
+    /// Calcuates a Fibonacci number via naive recursion.
     ///
-    /// - Parameter position: which fibonacci number to calculate
-    /// - Returns: the fibonacci number calucated
+    /// Recursion starts from the end and works backwards.
+    ///
+    /// Cost: O(n) space, O(n) time
+    ///
+    /// - Parameter position: which Fibonacci number to calculate.
+    /// - Returns: the Fibonacci number calucated.
     func recursive(_ position: Int) -> Int {
+        
+        /// A variable to store the calcuated Fibonacci numbers.
         var value = 0
 
-        
-        if position == 1 || position == 2 {
+        if position <= 2 { // We know that the 0th, 1st, and 2nd Fibonacci numbers are 1.
             
             value = 1
         } else {
             
-            value = recursive(position - 1) + recursive(position - 2)
+            value = recursive(position - 1) + recursive(position - 2) // Call this function again and again until we get the value asked for! See below for how this recursion works!
         }
         
-        return value
+        return value // When all the recursion is done the result is the nth Fibonacci number.
     }
     
     
-    /// Calcuates a fibonacci number via memoized recursion
+    /// Calcuates a Fibonacci number via memoized recursion.
     ///
-    /// - Parameter position: which fibonacci number to calculate
-    /// - Returns: the fibonacci number calucated
+    /// Memonization keeps a record of results so no values are calcuated more than once.
+    ///
+    /// Cost: O(1) space, O(1) time
+    ///
+    /// - Parameter position: which Fibonacci number to calculate
+    /// - Returns: the Fibonacci number calucated
     func memoized(_ position: Int) -> Int {
+        
+        /// A variable to store the calcuated Fibonacci numbers.
         var value = 0
         
-        if previousValues[position] != 0 {
-            return previousValues[position]
-        } else {
-            if position == 1 || position == 2 {
+        if previousValues[position] != 0 {  // Remember that `0` is a signal that means a Fibonacci number has not been calcuated for this position (index).
+            
+            return previousValues[position] // If we have any other value besides '0' we can return it and declare that we are done!
+            
+        } else { // The Fibonacci number for this position in the Array has not been calculated yet...
+            
+            if position <= 2 { // We know that the 0th, 1st, and 2nd Fibonacci numbers are 1.
                 
                 value = 1
             } else {
                 
-                value = memoized(position - 1) + memoized(position - 2)
+                value = memoized(position - 1) + memoized(position - 2) // Call this function again and again until we get the value asked for! It the same method (algorthm) as the recursive(:) function above!
             }
         }
-        previousValues[position] = value
-        return value
+        
+        previousValues[position] = value // Save the calcuated Fibonacci number for this position so we don't have to calcuated it again--this is the secret of memoization!
+        
+        return value // When all the recursion is done the result is the nth Fibonacci number.
     }
     
-    /// Calcuates a fibonacci number via bottoms up algorithm
+    /// Calcuates a Fibonacci number via a memoized bottoms-up algorithm.
     ///
-    /// - Parameter position: which fibonacci number to calculate
-    /// - Returns: the fibonacci number calucated
+    /// Bottoms up starts from the beginning and works forwards. Memonization keeps a record of results so no values are calcuated more than once.
+    ///
+    /// Cost: O(1) space, O(1) time.
+    ///
+    /// - Parameter position: which Fibonacci number to calculate.
+    /// - Returns: the Fibonacci number calucated.
     func bottomsup(_ position: Int) -> Int {
         
-        if position == 1 || position == 2 {
+        if position <= 2 {
             
             return 1
             
@@ -204,7 +245,7 @@ analysis["memoized"] = timing
 print("ButtomsUp() found that the \(searchIndex)th fibonacci number is \(fibNumber) ")
 analysis["bottomsup"] = timing
 
-print("\(fib.previousValues)")
+print("previousValues \(fib.previousValues)")
 
 let analysisSorted = analysis.sorted(by: {$0.value < $1.value} )
 for item in analysisSorted {
