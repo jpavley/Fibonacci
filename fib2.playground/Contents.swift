@@ -26,7 +26,7 @@ import Foundation
 //: ## Fibonacci class
 //: Read over the plass and then jump to the bottom to see how to use it to calculate your favorite Fibonacci number.
 
-/// A class that will help us explore differnt algorthms and measure their efficency at calculating Fibonacci numbers.
+/// A class that will help us explore differnt algorthms and measure their efficency at calculating Fibonacci numbers. Remember you can option-click on a name and get it's documentation in a popup!
 class Fibonacci {
 
     /// Enunumeration of different methods for calculating Fibonacci numbers. Used to choose a particular method "on demand" in the calc(::) function.
@@ -164,7 +164,7 @@ class Fibonacci {
                 value = 1
             } else {
                 
-                value = memoized(position - 1) + memoized(position - 2) // Call this function again and again until we get the value asked for! It the same method (algorthm) as the recursive(:) function above!
+                value = memoized(position - 1) + memoized(position - 2) // Call this function again and again until we get the value asked for! It the same method (algorthm) as the recursive(:) function above! Rember that F = (F-1) + (F-2).
             }
         }
         
@@ -183,37 +183,63 @@ class Fibonacci {
     /// - Returns: the Fibonacci number calucated.
     func bottomsup(_ position: Int) -> Int {
         
-        if position <= 2 {
+        if position <= 2 { // We know that the 0th, 1st, and 2nd Fibonacci numbers are 1.
             
-            return 1
+            return 1 // No need to memoize the ressult, just return 1. This way is the fastist!
             
         } else {
             
-            previousValues[1] = 1
-            previousValues[2] = 1
+            previousValues[1] = 1 // The 1st Fibonacci number is 1.
+            previousValues[2] = 1 // The 2nd Fibonacci number is 2.
             
-            for i in 3...position {
+            for i in 3...position { // Loop from the 3nd position to the desired postion (the nth).
                 
-                previousValues[i] = previousValues[i-1] + previousValues[i-2]
+                previousValues[i] = previousValues[i-1] + previousValues[i-2] // Store the result of calcuating this Fibonacci number from the previous two: F = (F-1) + (F-2).
             }
             
-            return previousValues[position]
+            return previousValues[position] // And we're done. No recursion here!
         }
     }
 }
 
+//: ## Using the Fibonacci Class
+
+//: To calucate Fibonacci numbers we need to create an instance of the `Fibonacci Class`.
 let fib = Fibonacci()
+
+//: And we need a place to store the timing results so we can compare them. A great way to do this is to use a Dictionary with the name of the method the key and the duration of the calcuation as the value. This way we can look up results by how they were created and sort the results by how long they took.
 var analysis = [String:Double]()
 
-let searchIndex: Int = 10
+//: Calcuating Fibonacci numnbers can be expensive in terms of time and computer resources (like memory). We use a variable to make sure each instance is using the same value to search for. `25` ia good value to use. Below `25` and the different methods of calcuation are almost equally fast. Higher than `25` and your computer might spend minuets or hours calcuating or more likely run out of memory.
+let searchIndex: Int = 25
 
+//: Now we're ready to calcuate our first Fibonacci number! Let's try the `shuffle` method first. We'll print the result and add how long it took to the `analysis` Dictonary.
 var (fibNumber, timing) = fib.calc(nth: searchIndex, style: .shuffle)
-print("Shuffle() found that the \(searchIndex)th fibonacci number is \(fibNumber) ")
+print("Shuffle() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
 analysis["shuffle"] = timing
+
+//: How does `shuffle` work? Let's follow it step by step for the 3rd Fibonacci number.
+//:
+//: First time around the loop (we start by calcuating the 2nd Fibonacci number)
+//: - `a` starts with the value of 1
+//: - `b` starts with the value of 1
+//: - `temp` is set equal to `a` so `temp` now equals 1
+//: - `a` is set equal to the sum of `a` + `b` so `a` now equals 2
+//: - `b` is set equal to `temp` so `b` now equals 1
+//:
+//: Second time around the loop (calcuating the 3rd Fibonacci number)
+//: - `a` starts with the value of 2
+//: - `b` starts with the value of 1
+//: - `temp` is set equal to `a` so `temp` now equals 2
+//: - `a` is set equal to the sum of `a` + `b` so `a` now equals 3
+//: - `b` is set equal to `temp` so `b` now equals 2
+//:
+//: By now you can see that the value of `a` shuffles through `temp` to become the value of `b` at the end of the each turn though the loop. The value of `a` is always updated inside each turn of the loop to be the current Fibonacci number: F = (F-1) + (F-2). Shuffle is one of the slower methods of calculating Fibonacci numbers, T(n) = O(n), but only uses a fixed about of space, S(n) = O(1).
+
 
 
 (fibNumber, timing) = fib.calc(nth: searchIndex, style: .recursive)
-print("Recursive() found that the \(searchIndex)th fibonacci number is \(fibNumber) ")
+print("Recursive() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
 analysis["recursive"] = timing
 
 // fib(10) = fib(9) + fib(8)
@@ -237,12 +263,12 @@ analysis["recursive"] = timing
 // fib(10) = 34 + 21 = 55
 
 (fibNumber, timing) = fib.calc(nth: searchIndex, style: .memoized)
-print("Memoized() found that the \(searchIndex)th fibonacci number is \(fibNumber) ")
+print("Memoized() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
 analysis["memoized"] = timing
 
 
 (fibNumber, timing) = fib.calc(nth: searchIndex, style: .bottomsup)
-print("ButtomsUp() found that the \(searchIndex)th fibonacci number is \(fibNumber) ")
+print("ButtomsUp() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
 analysis["bottomsup"] = timing
 
 print("previousValues \(fib.previousValues)")
