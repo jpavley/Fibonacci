@@ -22,10 +22,10 @@ import Foundation
 //: Given the characteristics of calculating Fibonacci numbers its a good idea to figure out the least expensive method (algorithm) to do so. But it's important to understand what "expensive" means in your context: The amount of calculations? The time it takes to calculate? The amount of memory it takes to calculate? the amount of memory it takes to represent them? You computer environment has limits and calculating Fibonacci numbers will quickly help you slam into them. This is why Fibonacci numbers are fun to play with.
 //:
 //: For much more info check out this Wikipedia article on [Fibonacci Numbers](https://en.wikipedia.org/wiki/Fibonacci_number)
-
+//:
 //: ## Fibonacci class
 //: Read over the plass and then jump to the bottom to see how to use it to calculate your favorite Fibonacci number.
-
+//:
 /// A class that will help us explore differnt algorthms and measure their efficency at calculating Fibonacci numbers. Remember you can option-click on a name and get it's documentation in a popup!
 class Fibonacci {
 
@@ -201,23 +201,15 @@ class Fibonacci {
         }
     }
 }
-
 //: ## Using the Fibonacci Class
-
-//: To calucate Fibonacci numbers we need to create an instance of the `Fibonacci Class`.
+3//: To calucate Fibonacci numbers we need to create an instance of the `Fibonacci Class`.
 let fib = Fibonacci()
-
 //: And we need a place to store the timing results so we can compare them. A great way to do this is to use a Dictionary with the name of the method the key and the duration of the calcuation as the value. This way we can look up results by how they were created and sort the results by how long they took.
 var analysis = [String:Double]()
-
 //: Calcuating Fibonacci numnbers can be expensive in terms of time and computer resources (like memory). We use a variable to make sure each instance is using the same value to search for. `25` ia good value to use. Below `25` and the different methods of calcuation are almost equally fast. Higher than `25` and your computer might spend minuets or hours calcuating or more likely run out of memory.
 let searchIndex: Int = 25
-
-//: Now we're ready to calcuate our first Fibonacci number! Let's try the `shuffle` method first. We'll print the result and add how long it took to the `analysis` Dictonary.
+//: Now we're ready to calcuate our first Fibonacci number! Let's try the `shuffle` method first.
 var (fibNumber, timing) = fib.calc(nth: searchIndex, style: .shuffle)
-print("Shuffle() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
-analysis["shuffle"] = timing
-
 //: How does `shuffle` work? Let's follow it step by step for the 3rd Fibonacci number.
 //:
 //: First time around the loop (we start by calcuating the 2nd Fibonacci number)
@@ -235,6 +227,11 @@ analysis["shuffle"] = timing
 //: - `b` is set equal to `temp` so `b` now equals 2
 //:
 //: By now you can see that the value of `a` shuffles through `temp` to become the value of `b` at the end of the each turn though the loop. The value of `a` is always updated inside each turn of the loop to be the current Fibonacci number: F = (F-1) + (F-2). Shuffle is one of the slower methods of calculating Fibonacci numbers, T(n) = O(n), but only uses a fixed about of space, S(n) = O(1).
+//:
+//: Let's print the result to console using a little string interpolation. On my MacBook Pro 15" from 2017 Shuffle took 0.0344330072 seconds to find the 25th Fibonacci number which should always and forever be 75025.
+print("Shuffle() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
+
+analysis["shuffle"] = timing
 
 
 
