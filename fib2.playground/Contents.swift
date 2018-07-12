@@ -88,28 +88,26 @@ class Fibonacci {
     
     /// Calcuates a Fibonacci number via shuffling values with a `temp` varliable.
     ///
+    /// Cost: O(1) space, O(n) time
+    ///
     /// - Parameter position: which Fibonacci number to calculate.
     /// - Returns: the fibonacci number calucated.
     func shuffle(_ position: Int) -> Int {
-        
-        
-        if position <= 1 { // We know that the 0th and 1st Fibonacci numbers are 1.
-            return position
-        }
         
         /// Currently calcuated Fibonacci number.
         var a = 1
         
         /// Previously calcuated Fibonacci number.
-        var b = 1
+        var b = 0
         
         /// Varible to temporarily hold the current calcuated Fibonacci number so that it can be passed on to `b` after `a` is updated with a new Fibonacci number.
         var temp = 0
         
-        for _ in 2..<position { // Loop from the 2nd position to the desired postion (the nth).
+        for i in 1...position { // Loop from the 1st position to the desired postion (the nth).
             temp = a  // Store the current value of most recently calcuated Fibonacci number in `temp`.
             a += b    // Add the previous Fibonacci number to the most recent value. F = (F-1) + (F-2).
             b = temp  // Store the value of the old `current Fibonacci number` in `b` so we can add it to a future `a`.
+            print("Shuffle Loop \(i), a = \(a), b = \(b), temp = \(temp)") // Diagostic info so we can follow along in the console. I love the console!
         }
         
         return a // When the loop is done we have the Fibonacci number that was asked for!
@@ -136,6 +134,7 @@ class Fibonacci {
             value = recursive(position - 1) + recursive(position - 2) // Call this function again and again until we get the value asked for! See below for how this recursion works!
         }
         
+        print("\(value)", terminator: ", ")  // Diagostic info so we can follow along in the console. Wait until you see the mess this print statement makes out of the console!
         return value // When all the recursion is done the result is the nth Fibonacci number.
     }
     
@@ -207,12 +206,19 @@ let fib = Fibonacci()
 //: And we need a place to store the timing results so we can compare them. A great way to do this is to use a Dictionary with the name of the method the key and the duration of the calcuation as the value. This way we can look up results by how they were created and sort the results by how long they took.
 var analysis = [String:Double]()
 //: Calcuating Fibonacci numnbers can be expensive in terms of time and computer resources (like memory). We use a variable to make sure each instance is using the same value to search for. `25` ia good value to use. Below `25` and the different methods of calcuation are almost equally fast. Higher than `25` and your computer might spend minuets or hours calcuating or more likely run out of memory.
-let searchIndex: Int = 25
-//: Now we're ready to calcuate our first Fibonacci number! Let's try the `shuffle` method first.
+let searchIndex: Int = 15
+//: Now we're ready to calcuate our first Fibonacci number! Let's try the `.shuffle` method first.
 var (fibNumber, timing) = fib.calc(nth: searchIndex, style: .shuffle)
-//: How does `shuffle` work? Let's follow it step by step for the 3rd Fibonacci number.
+//: How does shuffle work? Let's follow it step by step for the 3rd Fibonacci number.
 //:
-//: First time around the loop (we start by calcuating the 2nd Fibonacci number)
+//: First time around the loop (calcuating the 1st Fibonacci number)
+//: - `a` starts with the value of 1
+//: - `b` starts with the value of 0
+//: - `temp` is set equal to `a` so `temp` now equals 1
+//: - `a` is set equal to the sum of `a` + `b` so `a` now equals 1
+//: - `b` is set equal to `temp` so `b` now equals 1
+//:
+//: Second time around the loop (calcuating the 2nd Fibonacci number)
 //: - `a` starts with the value of 1
 //: - `b` starts with the value of 1
 //: - `temp` is set equal to `a` so `temp` now equals 1
@@ -228,17 +234,13 @@ var (fibNumber, timing) = fib.calc(nth: searchIndex, style: .shuffle)
 //:
 //: By now you can see that the value of `a` shuffles through `temp` to become the value of `b` at the end of the each turn though the loop. The value of `a` is always updated inside each turn of the loop to be the current Fibonacci number: F = (F-1) + (F-2). Shuffle is one of the slower methods of calculating Fibonacci numbers, T(n) = O(n), but only uses a fixed about of space, S(n) = O(1).
 //:
-//: Let's print the result to console using a little string interpolation. On my MacBook Pro 15" from 2017 Shuffle took 0.0344330072 seconds to find the 25th Fibonacci number which should always and forever be 75025.
+//: Let's print the result to console using a little string interpolation. On my MacBook Pro 15" from 2017 Shuffle took 0.0344330072 seconds to find the 25th Fibonacci number which should always and forever be 75025. It's important to note that the shuffle loop was processed 25 times before the final result was calcuated. This means shuffle uses n calculations to find the n Fibonacci numbers. That's actualy pretty good: linear growth in direct proportion to the size of the input data.
 print("Shuffle() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
-
+//: Now let's add the time it took shuffle to calcuate this wonderful Fibonacci number to our analysis dictionary.
 analysis["shuffle"] = timing
-
-
-
+//: Again! Again! as the Telly Tubbies used to say! This time we'll use the fancy `.recursive` method to calcuate the 25th Fibonacci number.
 (fibNumber, timing) = fib.calc(nth: searchIndex, style: .recursive)
-print("Recursive() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
-analysis["recursive"] = timing
-
+//: How does resursive work? It's a lot harder to walk through recursive code and
 // fib(10) = fib(9) + fib(8)
 // fib(9)  = fib(8) + fib(7)
 // fib(8)  = fib(7) + fib(6)
@@ -258,6 +260,8 @@ analysis["recursive"] = timing
 // fib(8)  = 13 + 8  = 21
 // fib(9)  = 21 + 13 = 34
 // fib(10) = 34 + 21 = 55
+print("Recursive() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
+analysis["recursive"] = timing
 
 (fibNumber, timing) = fib.calc(nth: searchIndex, style: .memoized)
 print("Memoized() found that the \(searchIndex)th fibonacci number is \(fibNumber)")
